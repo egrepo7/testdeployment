@@ -17,9 +17,9 @@ class Quotes extends CI_Controller {
 	{	
 		$this->load->library('form_validation');
 		$loggedUser = $this->session->userdata('loggedin');
-		$this->load->model('Quote');   
-		$faves = $this->Quote->displayFavorites($loggedUser['id']);
-		$notfaves = $this->Quote->displayNotFavorites($loggedUser['id']);
+		$this->load->model('quote');   
+		$faves = $this->quote->displayFavorites($loggedUser['id']);
+		$notfaves = $this->quote->displayNotFavorites($loggedUser['id']);
 		$this->load->view('userpage', ['faves' => $faves, 'notfaves' => $notfaves]);
 	}
 
@@ -43,8 +43,8 @@ class Quotes extends CI_Controller {
 			}
 			else
 			{
-				$this->load->model('Quote');   //use this instead of "$_POST"
-				$method = $this->Quote->addUser($this->input->post());
+				$this->load->model('quote');   //use this instead of "$_POST"
+				$method = $this->quote->addUser($this->input->post());
 				$this->load->view('loginreg');
 			}
 
@@ -63,8 +63,8 @@ class Quotes extends CI_Controller {
 			else
 			{
 				$login_info = $this->input->post();
-				$this->load->model("Quote");
-				$method = $this->Quote->getUserinfo($login_info);
+				$this->load->model("quote");
+				$method = $this->quote->getUserinfo($login_info);
 				$this->session->set_userdata('loggedin', $method);
 				redirect('/Quotes/viewDashboard');
 				
@@ -75,7 +75,7 @@ class Quotes extends CI_Controller {
 	{
 		$this->load->library('form_validation');
 
-		$this->form_validation->set_rules('quoted_by', 'Quoted By:', 'required|min_length[3]');
+		$this->form_validation->set_rules('Quoted_by', 'Quoted By:', 'required|min_length[3]');
 		$this->form_validation->set_rules('message', 'Message', 'required|min_length[10]');
 
 			if($this->form_validation->run() == FALSE)
@@ -87,15 +87,15 @@ class Quotes extends CI_Controller {
 				// die();
 
 			$loggedUser = $this->session->userdata('loggedin');
-			$this->load->model('Quote');   
-			$faves = $this->Quote->displayFavorites($loggedUser['id']);
-			$notfaves = $this->Quote->displayNotFavorites($loggedUser['id']);
+			$this->load->model('quote');   
+			$faves = $this->quote->displayFavorites($loggedUser['id']);
+			$notfaves = $this->quote->displayNotFavorites($loggedUser['id']);
 			$this->load->view('userpage', ['faves' => $faves, 'notfaves' => $notfaves]);
 				
 			}
 			else{
-				$this->load->model('Quote');
-				$this->Quote->addQuote($this->input->post());
+				$this->load->model('quote');
+				$this->quote->addQuote($this->input->post());
 				redirect('Quotes/viewDashboard');
 			}
 
@@ -103,16 +103,16 @@ class Quotes extends CI_Controller {
 
 	public function addFave($quoteid, $userid)
 	{
-		$this->load->model('Quote');
-		$this->Quote->addToList($quoteid, $userid);
+		$this->load->model('quote');
+		$this->quote->addToList($quoteid, $userid);
 		
 		redirect('/Quotes/viewDashboard');
 	}
 
 	public function removeFave($quoteid, $userid)
 	{
-		$this->load->model('Quote');
-		$this->Quote->removeFave($quoteid, $userid);
+		$this->load->model('quote');
+		$this->quote->removeFave($quoteid, $userid);
 
 		redirect('/Quotes/viewDashboard');
 	}
@@ -120,8 +120,8 @@ class Quotes extends CI_Controller {
 	public function viewPoster($id)
 	{
 		
-		$this->load->model('Quote');
-		$poster_info = $this->Quote->viewPoster($id);
+		$this->load->model('quote');
+		$poster_info = $this->quote->viewPoster($id);
 		$this->load->view('posterpage', ['poster' => $poster_info]);
 
 		
